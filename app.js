@@ -23,6 +23,24 @@ const setupSections = Array.from(document.querySelectorAll('.setup-section'));
 const progressDots = Array.from(document.querySelectorAll('.progress-dot'));
 const recipeSummary = document.getElementById("recipe-summary");
 const recipeSteps = document.getElementById("recipe-steps");
+const summaryDose = document.getElementById("summary-dose");
+const summaryYield = document.getElementById("summary-yield");
+const summaryTime = document.getElementById("summary-time");
+const summaryRatio = document.getElementById("summary-ratio");
+const summaryShot = document.getElementById("summary-shot");
+const summaryDoseRing = document.getElementById("summary-dose-ring");
+const summaryYieldRing = document.getElementById("summary-yield-ring");
+const summaryTimeRing = document.getElementById("summary-time-ring");
+const startBrewingButton = document.getElementById("start-brewing");
+const brewingMode = document.getElementById("brewing-mode");
+const brewingOverlay = document.getElementById("brewing-overlay");
+const brewingExit = document.getElementById("brewing-exit");
+const brewingPrev = document.getElementById("brewing-prev");
+const brewingNext = document.getElementById("brewing-next");
+const brewingTitle = document.getElementById("brewing-title");
+const brewingText = document.getElementById("brewing-text");
+const brewingProgress = document.getElementById("brewing-progress");
+const brewingIcon = document.getElementById("brewing-icon");
 
 const machineTypeInputs = Array.from(document.querySelectorAll('input[name="machine-type"]'));
 const grinderTypeInputs = Array.from(document.querySelectorAll('input[name="grinder-type"]'));
@@ -93,6 +111,9 @@ const target = {
 
 let availableDrinks = [];
 let activeDrinkId = null;
+let currentRecipeContext = null;
+let brewingSteps = [];
+let brewingStepIndex = 0;
 
 const formatNumber = (value, digits = 1) => {
   if (!Number.isFinite(value)) return "-";
@@ -105,6 +126,89 @@ const formatOz = (value, suffix = "fl oz") => {
 };
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+const parseDoseFromBeanType = (beanType) => {
+  if (!beanType) return null;
+  const match = beanType.match(/(\d+(?:\.\d+)?)\s*g/i);
+  return match ? Number(match[1]) : null;
+};
+
+const setRingProgress = (element, value, max) => {
+  if (!element || !Number.isFinite(value) || !Number.isFinite(max) || max <= 0) {
+    return;
+  }
+  const progress = clamp(value / max, 0.12, 1);
+  element.style.setProperty("--progress", progress.toFixed(2));
+};
+
+const stepIcons = {
+  grind: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="8" cy="9" r="3" />
+      <circle cx="14" cy="14" r="3" />
+      <path d="M16 6l4 4" />
+    </svg>
+  `,
+  dose: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="4" y="6" width="16" height="12" rx="4" />
+      <path d="M8 12h8" />
+    </svg>
+  `,
+  tamp: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 7h12" />
+      <rect x="9" y="7" width="6" height="10" rx="2" />
+      <path d="M7 19h10" />
+    </svg>
+  `,
+  brew: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="5" y="5" width="14" height="10" rx="3" />
+      <path d="M7 19c3-3 7-3 10 0" />
+    </svg>
+  `,
+  steam: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 4c-2 3 1 5 1 7" />
+      <path d="M13 4c-2 3 1 5 1 7" />
+      <path d="M7 16h10" />
+    </svg>
+  `,
+  pour: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 6h9l-2 4H5z" />
+      <path d="M15 9c2 2 2 4 0 7" />
+    </svg>
+  `,
+  serve: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="6" y="6" width="10" height="9" rx="3" />
+      <path d="M16 8h2a2 2 0 0 1 0 4h-2" />
+      <path d="M5 18h14" />
+    </svg>
+  `,
+  default: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 8v4l3 2" />
+    </svg>
+  `,
+};
+
+const getStepIconMarkup = (step, index) => {
+  const text = (step || "").toLowerCase();
+  if (text.includes("grind")) return stepIcons.grind;
+  if (text.includes("dose") || text.includes("weigh") || text.includes("measure")) return stepIcons.dose;
+  if (text.includes("tamp")) return stepIcons.tamp;
+  if (text.includes("brew") || text.includes("pull") || text.includes("extract"))
+    return stepIcons.brew;
+  if (text.includes("steam") || text.includes("microfoam")) return stepIcons.steam;
+  if (text.includes("pour") || text.includes("latte art")) return stepIcons.pour;
+  if (text.includes("serve") || text.includes("enjoy")) return stepIcons.serve;
+  const fallback = [stepIcons.grind, stepIcons.dose, stepIcons.tamp, stepIcons.brew, stepIcons.pour];
+  return fallback[index % fallback.length] || stepIcons.default;
+};
 
 const getValues = () => ({
   machine: fields.machine.value,
@@ -301,6 +405,8 @@ const setActiveView = (viewId) => {
   viewLinks.forEach((link) => {
     link.classList.toggle("is-active", link.dataset.viewTarget === viewId);
   });
+
+  closeBrewingMode();
 };
 
 const setDrinksStatus = (message, isVisible = true) => {
@@ -434,6 +540,18 @@ const renderDrinks = (drinks) => {
   });
 };
 
+const resetRecipeSummary = () => {
+  if (summaryDose) summaryDose.textContent = "--";
+  if (summaryYield) summaryYield.textContent = "--";
+  if (summaryTime) summaryTime.textContent = "--";
+  if (summaryRatio) summaryRatio.textContent = "--";
+  if (summaryShot) summaryShot.textContent = "--";
+  if (summaryDoseRing) summaryDoseRing.style.setProperty("--progress", "0.12");
+  if (summaryYieldRing) summaryYieldRing.style.setProperty("--progress", "0.12");
+  if (summaryTimeRing) summaryTimeRing.style.setProperty("--progress", "0.12");
+  if (startBrewingButton) startBrewingButton.disabled = true;
+};
+
 const renderRecipe = (recipe, drink) => {
   recipeTitle.textContent = recipe.name || drink?.name || "Recipe";
   const summaryText =
@@ -444,15 +562,97 @@ const renderRecipe = (recipe, drink) => {
     )} milk · ${formatOz(drink.waterOz, "fl oz")} water`;
   recipeSummary.textContent = summaryText;
 
+  const dose = parseDoseFromBeanType(currentRecipeContext?.beanType) || 18;
+  const espressoOz = Number(recipe.espressoOz ?? drink?.espressoOz ?? 0);
+  const yieldGrams = espressoOz > 0 ? espressoOz * 30 : dose * 2;
+  const ratio = yieldGrams / dose;
+  const timeSeconds = recipe.steps
+    ?.map((step) => step.match(/(\d+)\s*(?:s|sec|seconds)/i))
+    .find(Boolean);
+  const timeValue = timeSeconds ? Number(timeSeconds[1]) : 28;
+
+  if (summaryDose) summaryDose.textContent = `${formatNumber(dose, 1)}g`;
+  if (summaryYield) summaryYield.textContent = `${formatNumber(yieldGrams, 0)}g`;
+  if (summaryTime) summaryTime.textContent = `${formatNumber(timeValue, 0)}s`;
+  if (summaryRatio) summaryRatio.textContent = `1:${formatNumber(ratio, 1)}`;
+  if (summaryShot) summaryShot.textContent = recipe.shotType || "Double";
+
+  setRingProgress(summaryDoseRing, dose, 22);
+  setRingProgress(summaryYieldRing, yieldGrams, 50);
+  setRingProgress(summaryTimeRing, timeValue, 35);
+
   recipeSteps.innerHTML = "";
-  (recipe.steps || []).forEach((step) => {
+  brewingSteps = recipe.steps || [];
+  brewingStepIndex = 0;
+  brewingSteps.forEach((step, index) => {
     const li = document.createElement("li");
-    li.textContent = step;
+    li.className = "recipe-step-card";
+    const icon = document.createElement("div");
+    icon.className = "step-icon";
+    icon.innerHTML = getStepIconMarkup(step, index);
+
+    const content = document.createElement("div");
+    content.className = "step-content";
+
+    const label = document.createElement("span");
+    label.className = "step-label";
+    label.textContent = `Step ${index + 1}`;
+
+    const text = document.createElement("p");
+    text.textContent = step;
+
+    content.appendChild(label);
+    content.appendChild(text);
+    li.appendChild(icon);
+    li.appendChild(content);
     recipeSteps.appendChild(li);
   });
 
+  if (startBrewingButton) {
+    startBrewingButton.disabled = brewingSteps.length === 0;
+  }
+
   recipeDetail.classList.remove("is-hidden");
   recipeDetail.setAttribute("aria-hidden", "false");
+};
+
+const renderBrewingStep = () => {
+  if (!brewingSteps.length) return;
+  const step = brewingSteps[brewingStepIndex] || "";
+  const total = brewingSteps.length;
+  if (brewingProgress) {
+    brewingProgress.textContent = `Step ${brewingStepIndex + 1} of ${total}`;
+  }
+  if (brewingTitle) {
+    brewingTitle.textContent = `Step ${brewingStepIndex + 1}`;
+  }
+  if (brewingText) {
+    brewingText.textContent = step;
+  }
+  if (brewingIcon) {
+    brewingIcon.innerHTML = getStepIconMarkup(step, brewingStepIndex);
+  }
+  if (brewingPrev) {
+    brewingPrev.disabled = brewingStepIndex === 0;
+  }
+  if (brewingNext) {
+    brewingNext.textContent = brewingStepIndex === total - 1 ? "Finish" : "Next step";
+  }
+};
+
+const openBrewingMode = () => {
+  if (!brewingMode || !brewingSteps.length) return;
+  brewingMode.classList.add("is-active");
+  brewingMode.setAttribute("aria-hidden", "false");
+  document.body.classList.add("brewing-active");
+  renderBrewingStep();
+};
+
+const closeBrewingMode = () => {
+  if (!brewingMode) return;
+  brewingMode.classList.remove("is-active");
+  brewingMode.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("brewing-active");
 };
 
 const fetchDrinks = async () => {
@@ -475,6 +675,9 @@ const handleGenerateDrinks = async () => {
   setDrinksStatus("Curating your drink lineup...");
   drinksGrid.innerHTML = "";
   recipeDetail.classList.add("is-hidden");
+  resetRecipeSummary();
+  brewingSteps = [];
+  brewingStepIndex = 0;
 
   try {
     const drinks = await fetchDrinks();
@@ -526,6 +729,7 @@ const handleDrinkClick = async (event) => {
   if (!drink) return;
 
   const values = getRecipeValues();
+  currentRecipeContext = values;
   activeDrinkId = drinkId;
 
   setDrinksStatus(`Building the ${drink.name} recipe...`);
@@ -535,7 +739,16 @@ const handleDrinkClick = async (event) => {
   recipeDetail.setAttribute("aria-hidden", "false");
   recipeTitle.textContent = drink.name;
   recipeSummary.textContent = "Generating your recipe...";
-  recipeSteps.innerHTML = "<li class=\"loading-step\">Brewing instructions...</li>";
+  resetRecipeSummary();
+  recipeSteps.innerHTML = `
+    <li class="recipe-step-card is-loading">
+      <div class="step-icon"></div>
+      <div class="step-content">
+        <span class="step-label">Brewing plan</span>
+        <p>Brewing instructions...</p>
+      </div>
+    </li>
+  `;
   
   const actionButton = card.querySelector(".drink-action");
   const previousText = actionButton?.textContent;
@@ -584,6 +797,39 @@ recipesForm.addEventListener("submit", (event) => event.preventDefault());
 generateDrinksButton.addEventListener("click", handleGenerateDrinks);
 drinksGrid.addEventListener("click", handleDrinkClick);
 
+if (startBrewingButton) {
+  startBrewingButton.addEventListener("click", () => {
+    brewingStepIndex = 0;
+    openBrewingMode();
+  });
+}
+
+if (brewingExit) {
+  brewingExit.addEventListener("click", closeBrewingMode);
+}
+
+if (brewingOverlay) {
+  brewingOverlay.addEventListener("click", closeBrewingMode);
+}
+
+if (brewingPrev) {
+  brewingPrev.addEventListener("click", () => {
+    brewingStepIndex = clamp(brewingStepIndex - 1, 0, brewingSteps.length - 1);
+    renderBrewingStep();
+  });
+}
+
+if (brewingNext) {
+  brewingNext.addEventListener("click", () => {
+    if (brewingStepIndex >= brewingSteps.length - 1) {
+      closeBrewingMode();
+      return;
+    }
+    brewingStepIndex = clamp(brewingStepIndex + 1, 0, brewingSteps.length - 1);
+    renderBrewingStep();
+  });
+}
+
 viewLinks.forEach((link) => {
   link.addEventListener("click", () => {
     setActiveView(link.dataset.viewTarget);
@@ -608,6 +854,7 @@ machineTypeInputs.forEach((input) => {
 setGuidanceVisibility(false);
 setSidebarOpen(false);
 setActiveView("recipes");
+resetRecipeSummary();
 
 
 if (recipeMachineSelect) {
