@@ -370,11 +370,14 @@ const renderDrinks = (drinks) => {
 
     const title = document.createElement("div");
     title.className = "drink-title";
-    title.innerHTML = `<h3>${drink.name}</h3><p>${formatOz(
+    title.innerHTML = `<h3>${drink.name}</h3><p class="drink-measurements">${formatOz(
       drink.espressoOz
     )} espresso · ${formatOz(drink.milkOz, "fl oz")} milk</p>`;
 
     header.appendChild(title);
+
+    const hero = document.createElement("div");
+    hero.className = "drink-hero";
 
     const illustration = document.createElement("div");
     illustration.className = `drink-illustration drink-illustration--${drink.glass}`;
@@ -387,23 +390,42 @@ const renderDrinks = (drinks) => {
     illustration.style.setProperty("--crema-stop", `${layers.cremaStop}%`);
     illustration.style.setProperty("--foam-stop", `${layers.foamStop}%`);
 
+    hero.appendChild(illustration);
+
+    const detailsId = `drink-details-${drink.id}`;
+
+    const detailsToggle = document.createElement("button");
+    detailsToggle.type = "button";
+    detailsToggle.className = "drink-toggle";
+    detailsToggle.setAttribute("aria-expanded", "false");
+    detailsToggle.setAttribute("aria-controls", detailsId);
+    detailsToggle.textContent = "Details";
+
     const details = document.createElement("div");
     details.className = "drink-details";
+    details.id = detailsId;
+    details.hidden = true;
     details.innerHTML = `
       <div><span>Crema</span><strong>${drink.crema}</strong></div>
       <div><span>Microfoam</span><strong>${drink.microfoam}</strong></div>
       <div><span>Latte Art</span><strong>${drink.latteArt ? "Yes" : "No"}</strong></div>
     `;
 
+    const actions = document.createElement("div");
+    actions.className = "drink-actions";
+
     const action = document.createElement("button");
     action.type = "button";
     action.className = "drink-action";
     action.textContent = "Make this";
 
+    actions.appendChild(detailsToggle);
+    actions.appendChild(action);
+
     card.appendChild(header);
-    card.appendChild(illustration);
+    card.appendChild(hero);
+    card.appendChild(actions);
     card.appendChild(details);
-    card.appendChild(action);
 
     drinksGrid.appendChild(card);
   });
@@ -476,6 +498,23 @@ const handleGenerateDrinks = async () => {
 };
 
 const handleDrinkClick = async (event) => {
+  const toggleButton = event.target.closest(".drink-toggle");
+  if (toggleButton) {
+    const card = toggleButton.closest(".drink-card");
+    const details = card?.querySelector(".drink-details");
+    if (!card || !details) return;
+    const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
+    toggleButton.setAttribute("aria-expanded", String(!isExpanded));
+    toggleButton.textContent = isExpanded ? "Details" : "Hide details";
+    details.hidden = isExpanded;
+    card.classList.toggle("is-expanded", !isExpanded);
+    return;
+  }
+
+  if (event.target.closest(".drink-details")) {
+    return;
+  }
+
   const card = event.target.closest(".drink-card");
   if (!card) return;
 

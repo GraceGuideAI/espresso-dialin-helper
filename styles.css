@@ -322,36 +322,43 @@ button:focus-visible {
   border-radius: 18px;
   border: 1px solid var(--border);
   background: #fff;
-  padding: 14px;
+  padding: 16px;
   box-shadow: var(--shadow);
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .drink-card__header {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  display: block;
+  text-align: center;
 }
 
 .drink-title h3 {
   margin: 0;
-  font-size: 1.02rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-.drink-title p {
+.drink-title p,
+.drink-measurements {
   margin: 4px 0 0;
   color: var(--muted);
-  font-size: 0.84rem;
+  font-size: 0.86rem;
+}
+
+.drink-hero {
+  display: flex;
+  justify-content: center;
 }
 
 .drink-illustration {
   position: relative;
-  width: 84px;
-  height: 110px;
+  width: 126px;
+  height: 165px;
   border: 1.5px solid var(--accent-strong);
   border-radius: 16px 16px 12px 12px;
-  margin-left: 4px;
+  margin: 0 auto;
   background: linear-gradient(180deg, #fefaf6 0%, #ffffff 100%);
   overflow: hidden;
 }
@@ -373,30 +380,30 @@ button:focus-visible {
 }
 
 .drink-illustration--tall {
-  height: 140px;
+  height: 210px;
   border-radius: 14px;
 }
 
 .drink-illustration--tumbler {
-  height: 120px;
+  height: 180px;
   border-radius: 12px;
 }
 
 .drink-illustration--cup {
-  width: 100px;
-  height: 90px;
+  width: 150px;
+  height: 135px;
   border-radius: 40px 40px 16px 16px;
 }
 
 .drink-illustration--ceramic,
 .drink-illustration--gibraltar {
-  height: 100px;
+  height: 150px;
   border-radius: 18px 18px 12px 12px;
 }
 
 .drink-illustration--demitasse {
-  width: 72px;
-  height: 80px;
+  width: 108px;
+  height: 120px;
   border-radius: 18px 18px 12px 12px;
 }
 
@@ -415,32 +422,55 @@ button:focus-visible {
 }
 
 .drink-details {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  font-size: 0.72rem;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   color: var(--muted);
 }
 
 .drink-details div {
+  flex: 1 1 0;
   display: grid;
-  gap: 2px;
+  gap: 4px;
   text-align: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--bg-muted);
 }
 
 .drink-details span {
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.08em;
 }
 
 .drink-details strong {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   letter-spacing: 0;
   color: var(--text);
   text-transform: none;
+}
+
+.drink-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.drink-toggle {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 0.82rem;
 }
 
 .drink-action {
@@ -1198,7 +1228,6 @@ form#recipes-form {
   }
 
   .drink-details {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
     font-size: 0.62rem;
   }
@@ -1217,19 +1246,17 @@ form#recipes-form {
   }
 
   .drink-card {
-    padding: 10px;
-    gap: 8px;
+    padding: 12px;
+    gap: 10px;
     border-radius: 14px;
   }
 
   .drink-card__header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    text-align: center;
   }
 
   .drink-title h3 {
-    font-size: 0.9rem;
+    font-size: 1rem;
     line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1238,7 +1265,7 @@ form#recipes-form {
   }
 
   .drink-title p {
-    font-size: 0.72rem;
+    font-size: 0.76rem;
     line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1247,8 +1274,8 @@ form#recipes-form {
   }
 
   .drink-illustration {
-    width: 56px;
-    height: 70px;
+    width: 90px;
+    height: 120px;
     border-radius: 10px 10px 8px 8px;
     margin-left: 0;
   }
@@ -1259,30 +1286,30 @@ form#recipes-form {
   }
 
   .drink-illustration--tall {
-    height: 70px;
+    height: 150px;
     border-radius: 10px;
   }
 
   .drink-illustration--tumbler {
-    height: 62px;
+    height: 135px;
     border-radius: 10px;
   }
 
   .drink-illustration--cup {
-    width: 56px;
-    height: 52px;
+    width: 108px;
+    height: 96px;
     border-radius: 24px 24px 10px 10px;
   }
 
   .drink-illustration--ceramic,
   .drink-illustration--gibraltar {
-    height: 56px;
+    height: 110px;
     border-radius: 12px 12px 8px 8px;
   }
 
   .drink-illustration--demitasse {
-    width: 42px;
-    height: 48px;
+    width: 80px;
+    height: 90px;
     border-radius: 12px 12px 8px 8px;
   }
 
@@ -1342,6 +1369,16 @@ form#recipes-form {
 
   .drink-details strong {
     font-size: 0.68rem;
+  }
+
+  .drink-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .drink-toggle,
+  .drink-action {
+    width: 100%;
   }
 }
 
