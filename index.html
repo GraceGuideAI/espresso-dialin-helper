@@ -250,41 +250,7 @@
           </div>
           <div class="recipe-output">
             <div class="recipe-hero">
-              <div class="recipe-hero-illustration" aria-hidden="true">
-                <svg class="brew-hero" viewBox="0 0 240 180" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="brewGlow" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#f9d7b5" />
-                      <stop offset="100%" stop-color="#b06b3f" />
-                    </linearGradient>
-                    <linearGradient id="brewMetal" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="#f6f2ee" />
-                      <stop offset="100%" stop-color="#e2d5c7" />
-                    </linearGradient>
-                  </defs>
-                  <rect x="24" y="26" width="140" height="100" rx="18" fill="url(#brewMetal)" />
-                  <rect x="40" y="44" width="108" height="22" rx="8" fill="#f0e3d6" />
-                  <rect x="52" y="74" width="82" height="8" rx="4" fill="#b06b3f" opacity="0.8" />
-                  <rect x="168" y="40" width="34" height="86" rx="12" fill="url(#brewGlow)" />
-                  <rect x="92" y="118" width="70" height="24" rx="12" fill="#2b1e16" opacity="0.9" />
-                  <rect x="78" y="128" width="36" height="18" rx="9" fill="#463225" />
-                  <path
-                    d="M70 22c-6-10 6-22 18-18"
-                    stroke="#b06b3f"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    fill="none"
-                  />
-                  <path
-                    d="M108 20c-6-12 8-24 20-18"
-                    stroke="#d79b6c"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    fill="none"
-                  />
-                  <circle cx="196" cy="32" r="10" fill="#f5c192" />
-                </svg>
-              </div>
+              <div class="recipe-hero-illustration" id="recipe-hero-illustration" aria-hidden="true"></div>
               <div class="recipe-hero-content">
                 <p class="eyebrow">Ready to Brew</p>
                 <h3 id="recipe-title"></h3>
@@ -293,39 +259,6 @@
                   <button type="button" class="cta-button" id="start-brewing" disabled>
                     Start Brewing
                   </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="recipe-summary-card" aria-label="Shot summary">
-              <div class="summary-rings">
-                <div class="summary-ring ring-dose" id="summary-dose-ring">
-                  <div class="ring-inner">
-                    <span class="ring-label">Dose</span>
-                    <strong id="summary-dose">--</strong>
-                  </div>
-                </div>
-                <div class="summary-ring ring-yield" id="summary-yield-ring">
-                  <div class="ring-inner">
-                    <span class="ring-label">Yield</span>
-                    <strong id="summary-yield">--</strong>
-                  </div>
-                </div>
-                <div class="summary-ring ring-time" id="summary-time-ring">
-                  <div class="ring-inner">
-                    <span class="ring-label">Time</span>
-                    <strong id="summary-time">--</strong>
-                  </div>
-                </div>
-              </div>
-              <div class="summary-meta">
-                <div>
-                  <span>Ratio</span>
-                  <strong id="summary-ratio">--</strong>
-                </div>
-                <div>
-                  <span>Shot</span>
-                  <strong id="summary-shot">--</strong>
                 </div>
               </div>
             </div>

@@ -18,6 +18,7 @@ const drinksStatus = document.getElementById("drinks-status");
 const drinksGrid = document.getElementById("drinks-grid");
 const recipeDetail = document.getElementById("recipe-detail");
 const recipeTitle = document.getElementById("recipe-title");
+const recipeHeroIllustration = document.getElementById("recipe-hero-illustration");
 const recipeOutput = document.querySelector(".recipe-output");
 
 const setupSections = Array.from(document.querySelectorAll('.setup-section'));
@@ -130,6 +131,75 @@ const formatOz = (value, suffix = "fl oz") => {
 };
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+const getRecipeHeroMarkup = (drinkName = "") => {
+  const name = drinkName.toLowerCase();
+  const cupBase = (layers) => `
+    <svg class="recipe-hero-svg" viewBox="0 0 240 180" aria-hidden="true">
+      <defs>
+        <linearGradient id="cupGlass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#f2e6da" stop-opacity="0.8" />
+        </linearGradient>
+        <linearGradient id="latteFoam" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fff8ef" />
+          <stop offset="100%" stop-color="#f1dcc6" />
+        </linearGradient>
+      </defs>
+      <rect x="62" y="20" width="116" height="140" rx="28" fill="url(#cupGlass)" />
+      <rect x="72" y="30" width="96" height="120" rx="22" fill="#ffffff" opacity="0.85" />
+      ${layers}
+      <rect x="62" y="20" width="116" height="140" rx="28" fill="none" stroke="#d9c7b8" stroke-width="2" />
+      <path d="M86 34h60" stroke="#ffffff" stroke-opacity="0.5" stroke-width="6" stroke-linecap="round" />
+    </svg>
+  `;
+
+  if (name.includes("cappuccino")) {
+    return cupBase(`
+      <rect x="78" y="118" width="84" height="34" rx="12" fill="#2d1810" />
+      <rect x="78" y="84" width="84" height="34" rx="12" fill="#f1dbc6" />
+      <rect x="78" y="52" width="84" height="34" rx="12" fill="url(#latteFoam)" />
+      <path d="M82 52c8 6 14 4 20 0s12-6 20 0 14 6 20 0" stroke="#fffaf0" stroke-width="6" stroke-linecap="round" />
+    `);
+  }
+  if (name.includes("latte")) {
+    return cupBase(`
+      <rect x="78" y="126" width="84" height="26" rx="10" fill="#2d1810" />
+      <rect x="78" y="56" width="84" height="70" rx="20" fill="#fff5e6" />
+      <circle cx="120" cy="68" r="18" fill="#f7dcc4" opacity="0.6" />
+      <path d="M110 68c6 6 14 6 20 0" stroke="#f0c9a8" stroke-width="3" stroke-linecap="round" />
+    `);
+  }
+  if (name.includes("cortado")) {
+    return cupBase(`
+      <rect x="78" y="102" width="84" height="48" rx="14" fill="#2d1810" />
+      <rect x="78" y="58" width="84" height="44" rx="14" fill="#fff5e6" />
+    `);
+  }
+  if (name.includes("flat white")) {
+    return cupBase(`
+      <rect x="78" y="112" width="84" height="38" rx="14" fill="#2d1810" />
+      <rect x="78" y="58" width="84" height="54" rx="16" fill="#fff5e6" />
+      <path d="M104 70c8 8 24 8 32 0" stroke="#f1d1b6" stroke-width="3" stroke-linecap="round" />
+    `);
+  }
+  if (name.includes("americano") || name.includes("long black")) {
+    return cupBase(`
+      <rect x="78" y="80" width="84" height="70" rx="16" fill="#2d1810" />
+      <rect x="78" y="70" width="84" height="10" rx="6" fill="#8b5a2b" />
+    `);
+  }
+  if (name.includes("ristretto")) {
+    return cupBase(`
+      <rect x="78" y="116" width="84" height="34" rx="12" fill="#2d1810" />
+      <rect x="78" y="108" width="84" height="6" rx="4" fill="#8b5a2b" />
+    `);
+  }
+  return cupBase(`
+    <rect x="78" y="112" width="84" height="38" rx="12" fill="#2d1810" />
+    <rect x="78" y="104" width="84" height="6" rx="4" fill="#8b5a2b" />
+  `);
+};
 
 const updateSegmentHighlight = (control) => {
   if (!control) return;
@@ -550,15 +620,19 @@ const renderDrinks = (drinks) => {
     detailsToggle.setAttribute("aria-controls", detailsId);
     detailsToggle.textContent = "Details";
 
+    const detailsWrapper = document.createElement("div");
+    detailsWrapper.className = "drink-details-wrapper";
+    detailsWrapper.id = detailsId;
+
     const details = document.createElement("div");
     details.className = "drink-details";
-    details.id = detailsId;
-    details.hidden = true;
     details.innerHTML = `
       <div><span>Crema</span><strong>${drink.crema}</strong></div>
       <div><span>Microfoam</span><strong>${drink.microfoam}</strong></div>
       <div><span>Latte Art</span><strong>${drink.latteArt ? "Yes" : "No"}</strong></div>
     `;
+
+    detailsWrapper.appendChild(details);
 
     const actions = document.createElement("div");
     actions.className = "drink-actions";
@@ -574,7 +648,7 @@ const renderDrinks = (drinks) => {
     card.appendChild(header);
     card.appendChild(hero);
     card.appendChild(actions);
-    card.appendChild(details);
+    card.appendChild(detailsWrapper);
 
     drinksGrid.appendChild(card);
   });
@@ -602,6 +676,9 @@ const renderRecipe = (recipe, drink) => {
       "fl oz"
     )} milk · ${formatOz(drink.waterOz, "fl oz")} water`;
   recipeSummary.textContent = summaryText;
+  if (recipeHeroIllustration) {
+    recipeHeroIllustration.innerHTML = getRecipeHeroMarkup(recipe.name || drink?.name || "");
+  }
 
   const dose = parseDoseFromBeanType(currentRecipeContext?.beanType) || 18;
   const espressoOz = Number(recipe.espressoOz ?? drink?.espressoOz ?? 0);
@@ -755,12 +832,11 @@ const handleDrinkClick = async (event) => {
   const toggleButton = event.target.closest(".drink-toggle");
   if (toggleButton) {
     const card = toggleButton.closest(".drink-card");
-    const details = card?.querySelector(".drink-details");
-    if (!card || !details) return;
+    const detailsWrapper = card?.querySelector(".drink-details-wrapper");
+    if (!card || !detailsWrapper) return;
     const isExpanded = toggleButton.getAttribute("aria-expanded") === "true";
     toggleButton.setAttribute("aria-expanded", String(!isExpanded));
     toggleButton.textContent = isExpanded ? "Details" : "Hide details";
-    details.hidden = isExpanded;
     card.classList.toggle("is-expanded", !isExpanded);
     return;
   }
@@ -787,6 +863,9 @@ const handleDrinkClick = async (event) => {
   recipeDetail.setAttribute("aria-hidden", "false");
   recipeTitle.textContent = drink.name;
   recipeSummary.textContent = "Generating your recipe...";
+  if (recipeHeroIllustration) {
+    recipeHeroIllustration.innerHTML = getRecipeHeroMarkup(drink.name);
+  }
   resetRecipeSummary();
   if (recipeOutput) recipeOutput.classList.remove("is-ready");
   recipeSteps.innerHTML = `
