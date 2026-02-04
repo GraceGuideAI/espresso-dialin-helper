@@ -29,7 +29,7 @@ body {
   line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
-  padding-top: 56px;
+  padding-top: 72px;
 }
 
 body::before {
@@ -879,14 +879,14 @@ body.brewing-active {
   left: 0;
   right: 0;
   height: 56px;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  background: rgba(251, 248, 244, 0.8);
+  padding: 0 20px;
+  background: rgba(250, 248, 245, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .sidebar {
@@ -1265,6 +1265,17 @@ form#recipes-form {
   box-sizing: border-box;
 }
 
+
+.milk-frothing-group .pill-option {
+  font-size: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+}
+
 .pill-option:hover {
   transform: translateY(-1px);
 }
@@ -1411,6 +1422,28 @@ form#recipes-form {
   font-size: 0.85rem;
   white-space: nowrap;
   pointer-events: none;
+}
+
+
+.latte-art-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+}
+
+.latte-art-label {
+  font-size: 14px;
+  color: #3e2723;
+}
+
+.toggle--compact {
+  padding: 0;
+  border: none;
+  background: transparent;
+  min-height: auto;
+  transform: scale(0.8);
+  transform-origin: right center;
 }
 
 .toggle {
@@ -1820,24 +1853,6 @@ form#recipes-form {
   width: 100%;
 }
 
-
-.setup-progress {
-  display: flex;
-  gap: 6px;
-  margin: 6px 0 16px;
-  justify-content: center;
-}
-
-.progress-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(93, 64, 55, 0.2);
-}
-
-.progress-dot.is-active {
-  background: rgba(93, 64, 55, 0.7);
-}
 
 .setup-section {
   border: 1px solid rgba(0,0,0,0.04);

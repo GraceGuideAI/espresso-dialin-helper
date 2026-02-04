@@ -195,7 +195,7 @@
 
       <div class="form-block">
         <div class="form-label">Milk Frothing</div>
-        <div class="pill-group segmented-control" role="radiogroup" aria-label="Milk Frothing">
+        <div class="pill-group segmented-control milk-frothing-group" role="radiogroup" aria-label="Milk Frothing">
           <input class="pill-input" type="radio" name="milk-frothing" id="milk-frothing-steam" value="steam" checked />
           <label class="pill-option" for="milk-frothing-steam"><span>Steam Wand</span></label>
           <input class="pill-input" type="radio" name="milk-frothing" id="milk-frothing-frother" value="frother" />
@@ -206,19 +206,20 @@
       </div>
 
       <div class="form-block">
-        <div class="form-label">Latte Art</div>
-        <label class="toggle" for="latte-art">
-          <span>Include latte art steps</span>
-          <input id="latte-art" type="checkbox" />
-          <span class="toggle-slider" aria-hidden="true"></span>
-        </label>
+        <div class="latte-art-row">
+          <span class="latte-art-label">Include latte art steps</span>
+          <label class="toggle toggle--compact" for="latte-art">
+            <input id="latte-art" type="checkbox" />
+            <span class="toggle-slider" aria-hidden="true"></span>
+          </label>
+        </div>
       </div>
     </div>
   </section>
 
   <div class="actions">
     <button type="button" id="generate-drinks" class="cta-button">
-      Next: Get Recipes
+      Show Me What I Can Make
     </button>
   </div>
 </form>
