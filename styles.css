@@ -42,7 +42,7 @@ main.container {
   z-index: 1;
   max-width: 980px;
   margin: 56px auto 72px;
-  padding: 0 18px 72px;
+  padding: 0 18px 72px 60px; /* Left padding to avoid sidebar toggle overlap */
 }
 
 .eyebrow {
@@ -344,6 +344,11 @@ button:focus-visible {
   margin: 0;
   padding-left: 18px;
   font-size: 0.96rem;
+}
+
+.recipe-steps .loading-step {
+  color: var(--muted);
+  font-style: italic;
 }
 
 .next-adjustment {
@@ -687,7 +692,13 @@ form#recipes-form {
 @media (max-width: 980px) {
   main.container {
     margin: 22px auto 52px;
-    padding: 0 16px 96px;
+    padding: 0 16px 96px 56px; /* Maintain sidebar toggle clearance */
+  }
+}
+
+@media (max-width: 520px) {
+  main.container {
+    padding: 0 14px 96px 14px; /* On mobile, toggle is smaller/overlay, less padding needed */
   }
 }
 

@@ -82,12 +82,14 @@ const formatOz = (value, suffix = "fl oz") => {
   return `${formatNumber(value, 1)} ${suffix}`;
 };
 
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
 const getValues = () => ({
   machine: fields.machine.value,
-  basket: Number(fields.basket.value),
-  dose: Number(fields.dose.value),
-  yield: Number(fields.yield.value),
-  time: Number(fields.time.value),
+  basket: clamp(Number(fields.basket.value) || 18, 10, 24),
+  dose: clamp(Number(fields.dose.value) || 18, 10, 24),
+  yield: clamp(Number(fields.yield.value) || 36, 20, 60),
+  time: clamp(Number(fields.time.value) || 28, 10, 60),
   roast: fields.roast.value,
   grinder: fields.grinder.value,
 });
@@ -419,6 +421,14 @@ const handleDrinkClick = async (event) => {
   activeDrinkId = drinkId;
 
   setDrinksStatus(`Building the ${drink.name} recipe...`);
+  
+  // Show loading state in recipe detail immediately
+  recipeDetail.classList.remove("is-hidden");
+  recipeDetail.setAttribute("aria-hidden", "false");
+  recipeTitle.textContent = drink.name;
+  recipeSummary.textContent = "Generating your recipe...";
+  recipeSteps.innerHTML = "<li class=\"loading-step\">Brewing instructions...</li>";
+  
   const actionButton = card.querySelector(".drink-action");
   const previousText = actionButton?.textContent;
   if (actionButton) {

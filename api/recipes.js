@@ -127,6 +127,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).json(recipe);
   } catch (error) {
-    return res.status(500).json({ error: "Server error" });
+    console.error("Recipe generation failed:", error?.message || error);
+    return res.status(500).json({ error: "Failed to generate recipe. Please try again." });
   }
 };
