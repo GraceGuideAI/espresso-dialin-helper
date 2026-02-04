@@ -24,10 +24,6 @@ const recipeSteps = document.getElementById("recipe-steps");
 const machineTypeInputs = Array.from(document.querySelectorAll('input[name="machine-type"]'));
 const grinderTypeInputs = Array.from(document.querySelectorAll('input[name="grinder-type"]'));
 const milkFrothingInputs = Array.from(document.querySelectorAll('input[name="milk-frothing"]'));
-const basketSizeInput = document.getElementById("basket-size");
-const basketSizeOutput = document.getElementById("basket-size-output");
-const basketSizeTrack = document.getElementById("basket-size-track");
-const basketSizeValue = document.getElementById("basket-size-value");
 const recipeMachineSelect = document.getElementById("recipe-machine");
 const latteArtInput = document.getElementById("latte-art");
 
@@ -53,8 +49,15 @@ const fields = {
 
 const machineDefaultsByType = {
   "semi-auto": "Breville Bambino",
-  automatic: "Breville Barista Express",
-  "super-auto": "DeLonghi Magnifica Evo (non-LatteCrema)",
+  automatic: "Breville Bambino Plus",
+  "super-auto": "De'Longhi Magnifica Evo",
+};
+
+const machineProfiles = {
+  "Breville Bambino": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Breville Bambino Plus": { type: "semi-auto", grinder: "burr", milk: "frother", basket: 18 },
+  "De'Longhi Magnifica Evo": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
+  "De'Longhi Magnifica Evo Next": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
 };
 
 const machineCapabilitiesByType = {
@@ -99,11 +102,13 @@ const getValues = () => ({
 const getCheckedValue = (inputs) => inputs.find((input) => input.checked)?.value;
 
 const getRecipeValues = () => {
-  const machineType = getCheckedValue(machineTypeInputs) || "semi-auto";
-  const grinderType = getCheckedValue(grinderTypeInputs) || "burr";
-  const milkFrothing = getCheckedValue(milkFrothingInputs) || "steam";
-  const basketSize = Number(basketSizeInput?.value) || 18;
-  const machine = recipeMachineSelect?.value || machineDefaultsByType[machineType];
+  const selectedMachine = recipeMachineSelect?.value || machineDefaultsByType["semi-auto"];
+  const profile = machineProfiles[selectedMachine];
+  const machineType = profile?.type || getCheckedValue(machineTypeInputs) || "semi-auto";
+  const grinderType = profile?.grinder || getCheckedValue(grinderTypeInputs) || "burr";
+  const milkFrothing = profile?.milk || getCheckedValue(milkFrothingInputs) || "steam";
+  const basketSize = profile?.basket || 18;
+  const machine = selectedMachine;
   const machineCapabilities = machineCapabilitiesByType[machineType] || machineCapabilitiesByType["semi-auto"];
 
   const grinderLabels = {
@@ -536,16 +541,6 @@ machineTypeInputs.forEach((input) => {
   });
 });
 
-if (basketSizeInput && basketSizeOutput) {
-  const updateBasketOutput = () => {
-    const value = Number(basketSizeInput.value);
-    basketSizeOutput.textContent = value;
-    const min = Number(basketSizeInput.min) || 0;
-    const max = Number(basketSizeInput.max) || 100;
-    const percent = ((value - min) / (max - min)) * 100;
-    if (basketSizeTrack) {
-      basketSizeTrack.style.setProperty("--value-pct", percent.toFixed(2));
-    }
     if (basketSizeValue) {
       basketSizeValue.setAttribute("aria-live", "polite");
     }
@@ -557,3 +552,14 @@ if (basketSizeInput && basketSizeOutput) {
 setGuidanceVisibility(false);
 setSidebarOpen(false);
 setActiveView("recipes");
+
+
+if (recipeMachineSelect) {
+  recipeMachineSelect.addEventListener("change", () => {
+    const profile = machineProfiles[recipeMachineSelect.value];
+    if (!profile) return;
+    machineTypeInputs.forEach((input) => (input.checked = input.value === profile.type));
+    grinderTypeInputs.forEach((input) => (input.checked = input.value === profile.grinder));
+    milkFrothingInputs.forEach((input) => (input.checked = input.value === profile.milk));
+  });
+}
