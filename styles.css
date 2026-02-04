@@ -139,9 +139,10 @@ main.container {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  padding: 24px;
+  padding: 16px;
   margin-top: 20px;
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  overflow: hidden;
 }
 
 .card h2,
@@ -155,6 +156,11 @@ main.container {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+}
+
+.card * {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tag {
@@ -208,6 +214,8 @@ select {
   background: #fff;
   transition: border-color var(--transition), box-shadow var(--transition);
   min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 select {
@@ -232,6 +240,9 @@ select:focus {
   justify-content: flex-end;
   gap: 16px;
   margin-top: 16px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 button {
@@ -636,11 +647,15 @@ form#recipes-form {
   display: grid;
   gap: 16px;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-block {
   margin-top: 0;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label {
@@ -651,9 +666,12 @@ form#recipes-form {
 
 .pill-group {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .segmented-control {
@@ -664,12 +682,13 @@ form#recipes-form {
   gap: 6px;
   min-height: 44px;
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
 }
 
 .segmented-control--triple {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
 }
 
 .pill-input {
@@ -684,17 +703,20 @@ form#recipes-form {
   justify-content: center;
   gap: 6px;
   min-height: 32px;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 999px;
   border: 1px solid var(--border);
   background: #fff;
   color: var(--text);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   transition: background-color var(--transition), color var(--transition),
     border-color var(--transition), transform var(--transition);
   width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .pill-option:hover {
@@ -731,23 +753,35 @@ form#recipes-form {
 
 .select-inline {
   gap: 6px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .slider-row {
   display: grid;
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .slider-control {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .slider-track {
   position: relative;
   flex: 1;
   padding-top: 18px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .slider {
@@ -804,6 +838,9 @@ form#recipes-form {
   justify-content: space-between;
   font-size: 0.78rem;
   color: var(--muted);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .slider-value {
@@ -885,6 +922,7 @@ form#recipes-form {
 
 .cta-button {
   width: 100%;
+  max-width: 100%;
   justify-content: center;
   background: linear-gradient(135deg, #c77745, #8a4724);
   color: #fff;
@@ -893,6 +931,7 @@ form#recipes-form {
   border-radius: 999px;
   font-weight: 600;
   transition: box-shadow var(--transition), transform var(--transition), filter var(--transition);
+  box-sizing: border-box;
 }
 
 .cta-button:hover {
