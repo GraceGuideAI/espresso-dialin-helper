@@ -27,6 +27,11 @@ const milkFrothingInputs = Array.from(document.querySelectorAll('input[name="mil
 const recipeMachineSelect = document.getElementById("recipe-machine");
 const latteArtInput = document.getElementById("latte-art");
 
+const roastLevelInputs = Array.from(document.querySelectorAll('input[name="roast-level"]'));
+const grindRangeInputs = Array.from(document.querySelectorAll('input[name="grind-range"]'));
+const freshnessInputs = Array.from(document.querySelectorAll('input[name="bean-freshness"]'));
+const waterTypeInputs = Array.from(document.querySelectorAll('input[name="water-type"]'));
+
 const defaults = {
   machine: "Breville Bambino",
   basket: 18,
@@ -117,13 +122,21 @@ const getRecipeValues = () => {
     preground: "Pre-ground coffee",
   };
 
+  const roastLevel = getCheckedValue(roastLevelInputs) || "medium";
+  const grindRange = getCheckedValue(grindRangeInputs) || "fine";
+  const freshness = getCheckedValue(freshnessInputs) || "0-7";
+  const waterType = getCheckedValue(waterTypeInputs) || "filtered";
+
   return {
     machine,
     grinder: grinderLabels[grinderType] || grinderLabels.burr,
     milkCapability:
       milkFrothing === "steam" ? "steam wand" : milkFrothing === "frother" ? "auto milk" : "no milk",
     beanType: `House blend (${basketSize}g basket)`,
-    roast: "medium",
+    roast: roastLevel,
+    grindRange,
+    freshness,
+    waterType,
     latteArt: Boolean(latteArtInput?.checked),
     machineCapabilities,
   };
