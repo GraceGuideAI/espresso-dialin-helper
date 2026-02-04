@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Espresso Dial-In Helper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <h1>Espresso Dial‑In Helper</h1>
+        <p>Quick guidance for your next espresso adjustment.</p>
+      </header>
+
+      <section class="card">
+        <form id="dialin-form" autocomplete="off">
+          <div class="grid">
+            <label>
+              Machine
+              <select id="machine">
+                <option value="Breville Bambino" selected>Breville Bambino</option>
+                <option value="Breville Barista Express">Breville Barista Express</option>
+                <option value="Gaggia Classic">Gaggia Classic</option>
+                <option value="Rancilio Silvia">Rancilio Silvia</option>
+              </select>
+            </label>
+
+            <label>
+              Basket size (g)
+              <input id="basket" type="number" min="10" max="24" step="0.1" value="18" />
+            </label>
+
+            <label>
+              Dose in (g)
+              <input id="dose" type="number" min="10" max="24" step="0.1" value="18" />
+            </label>
+
+            <label>
+              Yield out (g)
+              <input id="yield" type="number" min="20" max="60" step="0.1" value="36" />
+            </label>
+
+            <label>
+              Time (s)
+              <input id="time" type="number" min="10" max="60" step="1" value="28" />
+            </label>
+
+            <label>
+              Roast level
+              <select id="roast">
+                <option value="light">Light</option>
+                <option value="medium" selected>Medium</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+
+            <label>
+              Grinder type
+              <select id="grinder">
+                <option value="Baratza Encore ESP" selected>Baratza Encore ESP</option>
+                <option value="1Zpresso manual">1Zpresso manual</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button type="button" id="reset">Reset</button>
+            <button type="button" id="share">Share</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="output-card">
+        <h2>Guidance</h2>
+        <ul id="guidance"></ul>
+        <div class="next-adjustment" id="next-adjustment"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
