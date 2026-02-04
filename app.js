@@ -53,16 +53,25 @@ const fields = {
 };
 
 const machineDefaultsByType = {
-  "semi-auto": "Breville Bambino",
-  automatic: "Breville Bambino Plus",
-  "super-auto": "De'Longhi Magnifica Evo",
+  "semi-auto": "Semi-Auto (Generic)",
+  automatic: "Automatic (Generic)",
+  "super-auto": "Super-Auto (Generic)",
 };
 
 const machineProfiles = {
+  "Semi-Auto (Generic)": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Automatic (Generic)": { type: "automatic", grinder: "burr", milk: "steam", basket: 18 },
+  "Super-Auto (Generic)": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
+  "DeLonghi Magnifica Evo (non-LatteCrema version)": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
   "Breville Bambino": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
-  "Breville Bambino Plus": { type: "semi-auto", grinder: "burr", milk: "frother", basket: 18 },
-  "De'Longhi Magnifica Evo": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
-  "De'Longhi Magnifica Evo Next": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
+  "Gaggia Classic Pro": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Lelit Anna": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Rancilio Silvia": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Smeg Semi-Pro": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Lelit MaraX": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Rocket Appartamento": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
+  "Miele CM6360": { type: "super-auto", grinder: "built-in", milk: "frother", basket: 14 },
+  "La Marzocco Linea Mini": { type: "semi-auto", grinder: "burr", milk: "steam", basket: 18 },
 };
 
 const machineCapabilitiesByType = {
