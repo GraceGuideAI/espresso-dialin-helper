@@ -9,11 +9,12 @@
   <body>
     <main class="container">
       <header class="header">
-        <h1>Espresso Dial‑In Helper</h1>
+        <h1>Espresso Dial-In Helper</h1>
         <p>Quick guidance for your next espresso adjustment.</p>
       </header>
 
-      <section class="card">
+      <section class="card" aria-labelledby="inputs-title">
+        <h2 id="inputs-title">Dial-in details</h2>
         <form id="dialin-form" autocomplete="off">
           <div class="grid">
             <label>
@@ -64,15 +65,15 @@
             </label>
           </div>
 
-          <div class="actions">
+          <div class="actions" role="group" aria-label="Form actions">
             <button type="button" id="reset">Reset</button>
             <button type="button" id="share">Share</button>
           </div>
         </form>
       </section>
 
-      <section class="card" id="output-card">
-        <h2>Guidance</h2>
+      <section class="card" id="output-card" aria-labelledby="guidance-title">
+        <h2 id="guidance-title">Guidance</h2>
         <ul id="guidance"></ul>
         <div class="next-adjustment" id="next-adjustment"></div>
       </section>
