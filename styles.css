@@ -838,11 +838,99 @@ form#recipes-form {
   }
 
   .drink-details {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    font-size: 0.62rem;
+  }
+
+  .drink-details strong {
+    font-size: 0.72rem;
   }
 
   .drink-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .drink-card {
+    padding: 6px;
+    gap: 6px;
+    border-radius: 14px;
+  }
+
+  .drink-card__header {
+    gap: 6px;
+  }
+
+  .drink-emoji {
+    font-size: 1.2rem;
+  }
+
+  .drink-title {
+    min-width: 0;
+  }
+
+  .drink-title h3 {
+    font-size: 0.78rem;
+    line-height: 1.1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .drink-title p {
+    font-size: 0.68rem;
+    line-height: 1.1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .drink-illustration {
+    width: 48px;
+    height: 58px;
+    border-radius: 10px 10px 8px 8px;
+    margin-left: 0;
+  }
+
+  .drink-illustration--tall {
+    height: 70px;
+    border-radius: 10px;
+  }
+
+  .drink-illustration--tumbler {
+    height: 62px;
+    border-radius: 10px;
+  }
+
+  .drink-illustration--cup {
+    width: 56px;
+    height: 52px;
+    border-radius: 24px 24px 10px 10px;
+  }
+
+  .drink-illustration--ceramic,
+  .drink-illustration--gibraltar {
+    height: 56px;
+    border-radius: 12px 12px 8px 8px;
+  }
+
+  .drink-illustration--demitasse {
+    width: 42px;
+    height: 48px;
+    border-radius: 12px 12px 8px 8px;
+  }
+
+  .drink-illustration--ceramic::before,
+  .drink-illustration--cup::before,
+  .drink-illustration--demitasse::before {
+    right: -10px;
+    top: 14px;
+    width: 10px;
+    height: 20px;
+    border-radius: 0 10px 10px 0;
   }
 }
 
@@ -867,5 +955,23 @@ form#recipes-form {
   .setup-icon svg {
     width: 46px;
     height: 46px;
+  }
+
+  .drink-grid {
+    gap: 6px;
+  }
+
+  .drink-card {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .drink-details {
+    gap: 4px;
+    font-size: 0.6rem;
+  }
+
+  .drink-details strong {
+    font-size: 0.68rem;
   }
 }
