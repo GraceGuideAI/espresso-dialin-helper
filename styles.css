@@ -590,7 +590,7 @@ button:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 16px;
+  padding: 20px;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: linear-gradient(140deg, var(--bg-soft), #f6e9db);
@@ -604,21 +604,22 @@ button:focus-visible {
   gap: 8px;
   min-width: 0;
   flex: 1 1 auto;
+  max-width: 60%;
 }
 
 .setup-hero h1 {
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1.2;
   font-weight: 700;
-  color: #2d1810;
+  color: #3e2723;
   margin: 0;
 }
 
 .setup-subhead {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
   color: #6d4c41;
-  line-height: 1.5;
+  line-height: 1.4;
   max-width: 100%;
   margin: 0;
 }
@@ -626,18 +627,32 @@ button:focus-visible {
 .setup-hero-art {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex: 0 0 120px;
-  width: 120px;
+  justify-content: flex-end;
+  flex: 0 0 35%;
+  width: 35%;
+  max-width: 130px;
   min-width: 0;
   flex-shrink: 0;
   position: relative;
 }
 
-.espresso-hero-illustration {
-  width: 120px;
-  height: 140px;
-  position: relative;
+.espresso-hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .espresso-steam .steam-line {
