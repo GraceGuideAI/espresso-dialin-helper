@@ -575,7 +575,8 @@ const renderRecipe = (recipe, drink) => {
   if (summaryYield) summaryYield.textContent = `${formatNumber(yieldGrams, 0)}g`;
   if (summaryTime) summaryTime.textContent = `${formatNumber(timeValue, 0)}s`;
   if (summaryRatio) summaryRatio.textContent = `1:${formatNumber(ratio, 1)}`;
-  if (summaryShot) summaryShot.textContent = recipe.shotType || "Double";
+  const shotLabel = (recipe.shotType || "Double").trim();
+  if (summaryShot) summaryShot.textContent = shotLabel.charAt(0).toUpperCase() + shotLabel.slice(1);
 
   setRingProgress(summaryDoseRing, dose, 22);
   setRingProgress(summaryYieldRing, yieldGrams, 50);
