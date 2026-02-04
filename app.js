@@ -283,10 +283,50 @@ const setDrinksLoading = (isLoading) => {
     : "Next: Get Recipes ✨";
 };
 
-const getDrinkTint = (drink) => {
-  if (drink.milkOz > 0) return "#f3d9b1";
-  if (drink.waterOz > 0) return "#2d2b2a";
-  return "#3b261b";
+const cremaHeights = {
+  Light: 4,
+  Soft: 5,
+  Balanced: 6,
+  Integrated: 5,
+  Defined: 7,
+  Bold: 8,
+  Silky: 6,
+  Lifted: 6,
+};
+
+const foamHeights = {
+  None: 0,
+  Light: 6,
+  Silky: 8,
+  Glossy: 9,
+  Thick: 12,
+};
+
+const getDrinkLayers = (drink) => {
+  const total = drink.espressoOz + drink.milkOz + drink.waterOz || 1;
+  const crema = drink.espressoOz > 0 ? cremaHeights[drink.crema] ?? 5 : 0;
+  const foam = drink.milkOz > 0 ? foamHeights[drink.microfoam] ?? 6 : 0;
+  const baseHeight = clamp((total / 10) * 90, 42, 92);
+  const liquidHeight = Math.max(30, Math.min(baseHeight, 100 - crema - foam - 2));
+  const scale = liquidHeight / total;
+
+  const water = drink.waterOz * scale;
+  const espresso = drink.espressoOz * scale;
+  const milk = drink.milkOz * scale;
+
+  const waterStop = water;
+  const espressoStop = waterStop + espresso;
+  const milkStop = espressoStop + milk;
+  const cremaStop = milkStop + crema;
+  const foamStop = cremaStop + foam;
+
+  return {
+    waterStop,
+    espressoStop,
+    milkStop,
+    cremaStop,
+    foamStop,
+  };
 };
 
 const renderDrinks = (drinks) => {
@@ -299,27 +339,24 @@ const renderDrinks = (drinks) => {
     const header = document.createElement("div");
     header.className = "drink-card__header";
 
-    const emoji = document.createElement("div");
-    emoji.className = "drink-emoji";
-    emoji.textContent = drink.emoji || "☕️";
-
     const title = document.createElement("div");
     title.className = "drink-title";
     title.innerHTML = `<h3>${drink.name}</h3><p>${formatOz(
       drink.espressoOz
     )} espresso · ${formatOz(drink.milkOz, "fl oz")} milk</p>`;
 
-    header.appendChild(emoji);
     header.appendChild(title);
 
     const illustration = document.createElement("div");
     illustration.className = `drink-illustration drink-illustration--${drink.glass}`;
-    const fillLevel = Math.min(
-      100,
-      Math.round(((drink.espressoOz + drink.milkOz + drink.waterOz) / 10) * 100)
-    );
-    illustration.style.setProperty("--fill", `${fillLevel}%`);
-    illustration.style.setProperty("--tint", getDrinkTint(drink));
+    illustration.innerHTML = `<div class="drink-illustration__liquid"></div>`;
+
+    const layers = getDrinkLayers(drink);
+    illustration.style.setProperty("--water-stop", `${layers.waterStop}%`);
+    illustration.style.setProperty("--espresso-stop", `${layers.espressoStop}%`);
+    illustration.style.setProperty("--milk-stop", `${layers.milkStop}%`);
+    illustration.style.setProperty("--crema-stop", `${layers.cremaStop}%`);
+    illustration.style.setProperty("--foam-stop", `${layers.foamStop}%`);
 
     const details = document.createElement("div");
     details.className = "drink-details";

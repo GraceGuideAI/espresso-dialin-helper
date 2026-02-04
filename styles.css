@@ -240,6 +240,10 @@ button:focus-visible {
   margin-top: 16px;
 }
 
+.drink-title {
+  min-width: 0;
+}
+
 .drink-card {
   border-radius: 18px;
   border: 1px solid var(--border);
@@ -252,12 +256,8 @@ button:focus-visible {
 
 .drink-card__header {
   display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.drink-emoji {
-  font-size: 1.7rem;
+  align-items: flex-start;
+  gap: 12px;
 }
 
 .drink-title h3 {
@@ -278,18 +278,23 @@ button:focus-visible {
   border: 1.5px solid var(--accent-strong);
   border-radius: 16px 16px 12px 12px;
   margin-left: 4px;
-  background: #fff;
+  background: linear-gradient(180deg, #fefaf6 0%, #ffffff 100%);
+  overflow: hidden;
 }
 
-.drink-illustration::after {
-  content: "";
+.drink-illustration__liquid {
   position: absolute;
-  left: 6px;
-  right: 6px;
-  bottom: 6px;
-  height: var(--fill, 70%);
-  background: var(--tint, #c89d7a);
+  inset: 6px;
   border-radius: 12px;
+  background: linear-gradient(
+    to top,
+    #c9b09b 0 var(--water-stop, 0%),
+    #3b2418 var(--water-stop, 0%) var(--espresso-stop, 0%),
+    #f2d7b5 var(--espresso-stop, 0%) var(--milk-stop, 0%),
+    #c9925c var(--milk-stop, 0%) var(--crema-stop, 0%),
+    #f7f1ea var(--crema-stop, 0%) var(--foam-stop, 0%),
+    transparent var(--foam-stop, 0%)
+  );
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
@@ -343,6 +348,17 @@ button:focus-visible {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--muted);
+}
+
+.drink-details div {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.drink-details span {
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
 }
 
 .drink-details strong {
@@ -843,36 +859,34 @@ form#recipes-form {
     font-size: 0.62rem;
   }
 
+  .drink-details span {
+    font-size: 0.54rem;
+  }
+
   .drink-details strong {
     font-size: 0.72rem;
   }
 
   .drink-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
   .drink-card {
-    padding: 6px;
-    gap: 6px;
+    padding: 10px;
+    gap: 8px;
     border-radius: 14px;
   }
 
   .drink-card__header {
-    gap: 6px;
-  }
-
-  .drink-emoji {
-    font-size: 1.2rem;
-  }
-
-  .drink-title {
-    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 
   .drink-title h3 {
-    font-size: 0.78rem;
-    line-height: 1.1;
+    font-size: 0.9rem;
+    line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -880,8 +894,8 @@ form#recipes-form {
   }
 
   .drink-title p {
-    font-size: 0.68rem;
-    line-height: 1.1;
+    font-size: 0.72rem;
+    line-height: 1.2;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -889,10 +903,15 @@ form#recipes-form {
   }
 
   .drink-illustration {
-    width: 48px;
-    height: 58px;
+    width: 56px;
+    height: 70px;
     border-radius: 10px 10px 8px 8px;
     margin-left: 0;
+  }
+
+  .drink-illustration__liquid {
+    inset: 4px;
+    border-radius: 8px;
   }
 
   .drink-illustration--tall {
@@ -958,17 +977,21 @@ form#recipes-form {
   }
 
   .drink-grid {
-    gap: 6px;
+    gap: 8px;
   }
 
   .drink-card {
-    padding: 5px;
-    gap: 5px;
+    padding: 8px;
+    gap: 6px;
   }
 
   .drink-details {
     gap: 4px;
     font-size: 0.6rem;
+  }
+
+  .drink-details span {
+    font-size: 0.5rem;
   }
 
   .drink-details strong {
